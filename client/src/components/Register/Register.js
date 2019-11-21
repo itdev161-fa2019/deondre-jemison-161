@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
 
-const Resgister = () => {
-    const [userDate, setUserData] = useState({
+const Register = () => {
+    const [userData, setUserData] = useState({
         name: '',
         email: '',
         password: '',
@@ -37,8 +37,8 @@ const Resgister = () => {
                     }
                 }
 
-                const body = JSON.stringify(newUser):
-                const res = await.axios.post('http://localhost:5000/api/users', body config);
+                const body = JSON.stringify(newUser);
+                const res = await axios.post('http://localhost:5000/api/users', body, config);
                 console.log(res.data);
             } catch (error) {
                 console.error(error.response.data);
@@ -57,6 +57,14 @@ const Resgister = () => {
             placeholder="Name"
             name="name"
             value={name}
+            onChange={e => onChange(e)} />
+        </div>
+        <div>
+            <input
+            type="text"
+            placeholder="Email"
+            name="email"
+            value={email}
             onChange={e => onChange(e)} />
         </div>
         <div>
@@ -81,3 +89,4 @@ const Resgister = () => {
     )
 }
 
+export default Register
