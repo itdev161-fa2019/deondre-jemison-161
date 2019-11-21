@@ -50,7 +50,6 @@ const Register = () => {
         return (
         <div>
             <h2>Register</h2>
-        </div>
         <div>
             <input
             type="text"
@@ -84,7 +83,8 @@ const Register = () => {
             onChange={e => onChange(e)} />
         </div>
         <div>
-            <button onClick{() => register()}>Register</button>
+            <button onClick={() => register()}>Register</button>
+        </div>
         </div>
     )
 }
