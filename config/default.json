@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://user01:mongoloid@cluster0-0k7dh.gcp.mongodb.net/test?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://user01:mongoloid@cluster0-0k7dh.gcp.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "maytheforcebewithyou"
 }
