@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
-const Login = ({ authenticateUSer }) => {
+const Login = ({ authenticateUser }) => {
     let history = useHistory();
     const [userData, setUserData] = useState({
         email: '',
@@ -50,7 +50,7 @@ const Login = ({ authenticateUSer }) => {
             })
         }
 
-        authenticateUSer();
+        authenticateUser();
     }
 
 
@@ -77,12 +77,12 @@ const Login = ({ authenticateUSer }) => {
                 <button onClick={() => loginUser()}>Log In</button>
             </div>
             <div>
-                {errors && errors.map{error =>
-                    <div key ={error.msg}>{error.msg}</div>}}
+                {errors && errors.map(error =>
+                    <div key ={error.msg}>{error.msg}</div>)}
             </div>
         </div>
     )
-    
+
 }
 
 export default Login;
