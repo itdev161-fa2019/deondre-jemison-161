@@ -207,6 +207,99 @@ app.post(
     }
 );
 
+/**
+ * @route GET api/posts
+ * @desc Get posts
+ */
+app.get('/api/posts', auth, async (req, res) => {
+    try {
+        const posts = await Post.find().sort({ date: -1 });
+
+        res.json(posts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+/**
+ * @route Get api/posts/:id
+ * @desc Get post
+ */
+app.get('/api/post/:id', auth, async (req, res) => {
+    try {
+        const post = await post.findById(req.params.id);
+
+        // Make sure the post was found
+        if (!post) {
+            return res.status(404).json({ msg: 'Post was not found' });
+        }
+
+        res.json(post);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+/**
+ * @route DELETE api/posts/id
+ * @desc Delete a post
+ */
+app.delete('/api/posts/:id', auth, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+
+        // Make sure the post was found
+        if(!post) {
+            return res.status(404).json({ msg: 'Post not found' })
+        }
+
+        // Make sure the request user created the post
+        if (post.user.toString() !== req.user.id) {
+            return res.status(401).json({ msg: 'User not authorized' });
+        }
+
+        await post.remove();
+
+        res.json({ msg: 'Post removed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+/**
+ * @route PUT api/posts/id
+ * @desc Update a post
+ */
+app.put('/api/posts/:id', auth, async (req, res) => {
+    try {
+        const { title, body } = req.body;
+        const post = await Post.findById(req.params.id);
+
+        // Make sure the post was found
+        if (!post) {
+            return res.status(404).json({ msg: 'Post not found' })
+        }
+
+        // Make sure the request user created the post
+        if (post.user.toString() !== req.user.id) {
+            return res.status(401).json({ msg: 'User not authorized' });
+        }
+        // Update the post and return
+        post.title = title || post.title;
+        post.body = body || post.body;
+
+        await post.save();
+
+        res.json({ msg: 'Post removed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
 // Connection listener
 const port = 5000;
 app.listen(port, () => console.log(`Express server running on port ${port}`));
