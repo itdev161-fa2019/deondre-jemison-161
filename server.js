@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import User from './models/User';
+import Post from './models/Post';
 import auth from './middleware/auth';
  
 // Initialize express application
@@ -140,6 +141,71 @@ app.get ('/api/auth', auth, async (req, res) => {
         res.status(500).send('Unknown server error');
     }
 });
+
+const returnToken = (user, res) => {
+    const payload = {
+        user: {
+            id: user.id
+        }
+    };
+
+    jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: '10hr' },
+        (err, token) => {
+            if (err) throw err;
+            res.json({ token: token });
+        }
+    );
+};
+
+// Post endpoints
+/**
+ * @route POST api/posts
+ * @desc Create post
+ */
+app.post(
+    '/api/posts'
+    [
+        auth,
+        [
+            check('title', 'Title text is required')
+                .not()
+                .isEmpty(),
+            check('body', 'Body text is required')
+                .not()
+                .isEmpty()
+        ]
+    ],
+    async (req, res) => {
+        const errors = validateResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).json({ errors: errors.array() });
+        } else {
+            const { title, body } = req.body;
+            try {
+                // Get the user who created the post
+                const user = await User.findById(req.user.id);
+
+                // Create a new post
+                const post = new Post({
+                    user: user.id,
+                    title: title,
+                    body: body
+                });
+
+                // Save to the db and return
+                await post.save();
+
+                res.json(post);
+            } catch (error) {
+                console.error(error);
+                res.status(500).send('Server error');
+            }
+        }
+    }
+);
 
 // Connection listener
 const port = 5000;
