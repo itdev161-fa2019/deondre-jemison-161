@@ -99,7 +99,7 @@ const Register = ({ authenticateUser }) => {
             onChange={e => onChange(e)} />
         </div>
         <div>
-            <button onClick={() => registerUser()}>Register</button>
+            <button onClick={() => register()}>Register</button>
         </div>
             <div>
                 {errors && errors.map(error =>
